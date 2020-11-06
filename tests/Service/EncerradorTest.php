@@ -6,6 +6,8 @@ use Alura\Leilao\Model\Leilao;
 use Alura\Leilao\Service\Encerrador;
 use PHPUnit\Framework\TestCase;
 
+include('LeilaoDaoMock.php');
+
 class EncerradorTest extends TestCase
 {
 
