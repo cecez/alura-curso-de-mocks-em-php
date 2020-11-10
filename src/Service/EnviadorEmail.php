@@ -5,9 +5,14 @@ namespace Alura\Leilao\Service;
 
 
 use Alura\Leilao\Model\Leilao;
+use DomainException;
 
 class EnviadorEmail
 {
+    /**
+     * @param  Leilao  $leilao
+     * @throws  DomainException Quando e-mail não é enviado.
+     */
     public function notificarTerminoLeilao(Leilao $leilao): void
     {
 
@@ -18,7 +23,7 @@ class EnviadorEmail
         );
 
         if (!$sucesso) {
-            throw new \DomainException('Erro ao enviar e-mail');
+            throw new DomainException('Erro ao enviar e-mail');
         }
 
     }

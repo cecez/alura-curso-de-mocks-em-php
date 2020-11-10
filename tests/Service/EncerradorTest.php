@@ -59,6 +59,13 @@ class EncerradorTest extends TestCase
 
     public function testDeveContinuarOProcessamentoAoEncontrarErroAoEnviarEmail()
     {
+        $e = new \DomainException('Erro ao enviar e-mail');
+
+        $this->_enviadorEmail->expects($this->exactly(2))
+                             ->method('notificarTerminoLeilao')
+                             ->willThrowException($e);
+
+        $this->_encerrador->encerra();
 
     }
 
