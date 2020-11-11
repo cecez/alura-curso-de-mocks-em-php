@@ -31,18 +31,18 @@ class EncerradorTest extends TestCase
         $this->_iphone = new LeilaoModel('iPhone 2020', new \DateTimeImmutable('10 days ago'));
 
         // cria mocks
-        $leilaoDao = $this->createMock(LeilaoDao::class);
+        $mockLeilaoDao = $this->createMock(LeilaoDao::class);
         // instrui mock
-        $leilaoDao->method('recuperarNaoFinalizados')->willReturn([$this->_ipad, $this->_iphone]);
+        $mockLeilaoDao->method('recuperarNaoFinalizados')->willReturn([$this->_ipad, $this->_iphone]);
         // informa que espera-se duas chamadas ao método atualiza
-        $leilaoDao->expects($this->exactly(2))
+        $mockLeilaoDao->expects($this->exactly(2))
             ->method('atualiza')
             ->withConsecutive([$this->_ipad], [$this->_iphone]);
 
         $this->_enviadorEmail = $this->createMock(EnviadorEmail::class);
 
         // chama código a se testar
-        $this->_encerrador = new Encerrador($leilaoDao, $this->_enviadorEmail);
+        $this->_encerrador = new Encerrador($mockLeilaoDao, $this->_enviadorEmail);
     }
 
     public function testLeiloesComMaisDeUmaSemanaDevemSerEncerrados()
