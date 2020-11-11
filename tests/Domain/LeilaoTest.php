@@ -8,6 +8,13 @@ use Alura\Leilao\Model\Usuario;
 use DomainException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class LeilaoTest
+ *
+ * @package Alura\Leilao\Tests\Domain
+ *
+ * TODO usar mocks nesta classe de teste
+ */
 class LeilaoTest extends TestCase
 {
     public function testProporLanceEmLeilaoFinalizadoDeveLancarExcecao()
