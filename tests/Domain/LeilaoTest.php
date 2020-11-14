@@ -6,6 +6,7 @@ use Alura\Leilao\Model\Lance;
 use Alura\Leilao\Model\Leilao;
 use Alura\Leilao\Model\Usuario;
 use DomainException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +18,21 @@ use PHPUnit\Framework\TestCase;
  */
 class LeilaoTest extends TestCase
 {
+    /**
+     * @var Usuario|MockObject
+     */
+    private $_mockUsuario1;
+    /**
+     * @var Usuario|MockObject
+     */
+    private $_mockUsuario2;
+
+    public function setUp(): void
+    {
+        $this->_criaMocks();
+    }
+
+
     public function testProporLanceEmLeilaoFinalizadoDeveLancarExcecao()
     {
         $this->expectException(DomainException::class);
@@ -25,7 +41,7 @@ class LeilaoTest extends TestCase
         $leilao = new Leilao('Fiat 147 0KM');
         $leilao->finaliza();
 
-        $leilao->recebeLance(new Lance(new Usuario(''), 1000));
+        $leilao->recebeLance(new Lance($this->_mockUsuario1, 1000));
     }
 
     /**
@@ -47,21 +63,29 @@ class LeilaoTest extends TestCase
     {
         $this->expectException(DomainException::class);
         $this->expectExceptionMessage('Usuário já deu o último lance');
-        $usuario = new Usuario('Ganancioso');
 
         $leilao = new Leilao('Objeto inútil');
 
-        $leilao->recebeLance(new Lance($usuario, 1000));
-        $leilao->recebeLance(new Lance($usuario, 1100));
+        $leilao->recebeLance(new Lance($this->_mockUsuario1, 1000));
+        $leilao->recebeLance(new Lance($this->_mockUsuario1, 1100));
     }
 
     public function dadosParaProporLances()
     {
-        $usuario1 = new Usuario('Usuário 1');
-        $usuario2 = new Usuario('Usuário 2');
+        $this->_criaMocks();
+
         return [
-            [1, [new Lance($usuario1, 1000)]],
-            [2, [new Lance($usuario1, 1000), new Lance($usuario2, 2000)]],
+            [1, [new Lance($this->_mockUsuario1, 1000)]],
+            [2, [new Lance($this->_mockUsuario1, 1000), new Lance($this->_mockUsuario2, 2000)]],
         ];
+    }
+
+    private function _criaMocks(): void
+    {
+        // criando mocks para usuários
+        $this->_mockUsuario1 = $this->getMockBuilder(Usuario::class)
+            ->setConstructorArgs(['Usuário 1'])->getMock();
+        $this->_mockUsuario2 = $this->getMockBuilder(Usuario::class)
+            ->setConstructorArgs(['Usuário 2'])->getMock();
     }
 }
